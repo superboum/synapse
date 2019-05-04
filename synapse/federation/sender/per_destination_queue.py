@@ -223,10 +223,15 @@ class PerDestinationQueue(object):
 
                 # We can only include at most 100 EDUs per transactions
                 # But we should keep one slot free for presence
+                to_remove = []
                 for key, val in self._pending_edus_keyed.items():
                     if (len(pending_edus) >= 99): break
                     pending_edus.append(val)
+                    to_remove.append(key)
+
+                for key in to_remove:
                     del self._pending_edus_keyed[key]
+
                 logger.info("TX [%s] extending edus with pending_edus_keyed, pending_edus len: %s", self._destination, len(pending_edus))
 
                 pending_edus.extend(self._pop_pending_edus(99 - len(pending_edus)))
