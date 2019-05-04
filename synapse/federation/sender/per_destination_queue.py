@@ -218,12 +218,12 @@ class PerDestinationQueue(object):
 
                 pending_edus.extend(self._get_rr_edus(force_flush=False))
 
-                # We can only include at most 100 EDUs per transactions
-                pending_edus.extend(self._pop_pending_edus(100 - len(pending_edus)))
-
                 pending_edus.extend(
                     self._pending_edus_keyed.values()
                 )
+
+                # We can only include at most 100 EDUs per transactions
+                pending_edus.extend(self._pop_pending_edus(100 - len(pending_edus)))
 
                 self._pending_edus_keyed = {}
 
