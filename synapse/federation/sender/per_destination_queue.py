@@ -218,7 +218,7 @@ class PerDestinationQueue(object):
                 
                 pending_edus.extend(self._get_rr_edus(force_flush=False))
                 logger.info("TX [%s] extending edus with rr_edus, pending_edus len: %s", self._destination, len(pending_edus))
-                pending_edus.extend(device_message_edus)
+                pending_edus.extend(device_message_edus[:99])
                 logger.info("TX [%s] extending edus with device_message_edus, pending_edus len: %s", self._destination, len(pending_edus))
 
                 # We can only include at most 100 EDUs per transactions
