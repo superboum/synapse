@@ -215,11 +215,9 @@ class PerDestinationQueue(object):
                 pending_pdus, self._pending_pdus = pending_pdus[:50], pending_pdus[50:]
 
                 pending_edus = []
-                
+
                 pending_edus.extend(self._get_rr_edus(force_flush=False))
-                logger.info("TX [%s] extending edus with rr_edus, pending_edus len: %s", self._destination, len(pending_edus))
                 pending_edus.extend(device_message_edus[:99])
-                logger.info("TX [%s] extending edus with device_message_edus, pending_edus len: %s", self._destination, len(pending_edus))
 
                 # We can only include at most 100 EDUs per transactions
                 # But we should keep one slot free for presence
@@ -232,10 +230,8 @@ class PerDestinationQueue(object):
                 for key in to_remove:
                     del self._pending_edus_keyed[key]
 
-                logger.info("TX [%s] extending edus with pending_edus_keyed, pending_edus len: %s", self._destination, len(pending_edus))
 
                 pending_edus.extend(self._pop_pending_edus(99 - len(pending_edus)))
-                logger.info("TX [%s] extending edus with pop_pending_edus, pending_edus len: %s", self._destination, len(pending_edus))
 
                 pending_presence = self._pending_presence
                 self._pending_presence = {}
@@ -255,7 +251,6 @@ class PerDestinationQueue(object):
                             },
                         )
                     )
-                logger.info("TX [%s] extending edus with presence, pending_edus len: %s", self._destination, len(pending_edus))
 
                 if pending_pdus:
                     logger.debug("TX [%s] len(pending_pdus_by_dest[dest]) = %d",
@@ -270,7 +265,6 @@ class PerDestinationQueue(object):
                 # may as well send any pending RRs
                 if len(pending_edus) < 100:
                     pending_edus.extend(self._get_rr_edus(force_flush=True))
-                logger.info("TX [%s] extending edus with rr_edus (2nd time), pending_edus len: %s", self._destination, len(pending_edus))
 
                 # END CRITICAL SECTION
 
